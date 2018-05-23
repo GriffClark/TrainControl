@@ -23,11 +23,23 @@ public class Model {
 		return null;
 	}
 	
-	public void addTrackNode (TrackNode trackNode, double distanceModifier) { 
+	public void addTrackNode (TrackNode trackNode, double distanceModifier) {  
+		//FIXME these need to create perfect triangles instead of impossible geometry
+		/*
+		 * 
+		 * in order to create sound shapes, each node needs to make a perfect triangle with each possible pair of other nodes. This is only relevant for nodes 3+, and 1 and 2 can be n distance apart
+		 * 
+		 * Create variable c that will be at random distance n determined by feeding a random number between b and c, where b is a point in the triangle a b c
+		 * using distance n, calculate distance between c and a
+		 * using the relation between c and a/b, triangles can be made with c , a , and R, where R is the remaining nodes in the network. Add pairs to a temp ArrayList<TrackDistancePair>
+		 * this math will then be verified by using c, b and, R. Add pairs to a temp ArrayList<TrackDistancePair>
+		 * 		if something does not check out, report an error to start? 
+		 * After node is verified to be possible, add all values of temp to tdPairs 
+		 */
 		if(trackNodes.size() > 0) {
 			trackNodes.add(trackNode);
 				for(int i = 0; i < trackNodes.size() - 1; i++) { //should loop through the whole thing except the one that was just added (distance to self = 0)
-					TrackDistancePair newTD = new TrackDistancePair(trackNodes.get(i), trackNode, (Math.random() * 100) * distanceModifier); //FIXME this will create imperfect triangles that will be impossible in real life
+					TrackDistancePair newTD = new TrackDistancePair(trackNodes.get(i), trackNode, (Math.random() * 100) * distanceModifier); 
 					tdPairs.add(newTD); //creates a new TrackDistancePair 
 					trackController.addTrack(new Track(newTD)); //makes the trackController aware of new connection 
 				}
@@ -59,12 +71,14 @@ public class Model {
 		this.trackNodes = trackNodes;
 	}
 
-	public ArrayList<TrackDistancePair> getTdPairs() {
-		return tdPairs;
+	public void addTdPair(TrackDistancePair t) {
+		tdPairs.add(t);
+		trackController.addTrack(t);
 	}
+	
 
-	public void setTdPairs(ArrayList<TrackDistancePair> tdPairs) {
-		this.tdPairs = tdPairs;
+	public ArrayList<TrackDistancePair> getTdPairs(){
+		return tdPairs;
 	}
 	
 	public void addTrain(String name, double accel, double maxV, int maxPassengers) {

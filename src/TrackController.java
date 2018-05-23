@@ -19,6 +19,10 @@ public class TrackController {
 		activeTracks.add(y);
 	}
 	
+	public void addTrack(TrackDistancePair y) {
+		activeTracks.add(new Track(y));
+	}
+	
 	public boolean isTrackOpen(TrackDistancePair tdPair) {
 		for(int i = 0; i < activeTracks.size(); i++) {
 			if(activeTracks.get(i).getName().equals(tdPair.getStr())) {
