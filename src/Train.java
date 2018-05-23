@@ -72,17 +72,18 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 		this.pastDestinations = pastDestinations;
 	}
 
-	public void getRandomDestination() {
+	public void getRandomDestination(int howMany) {
 		//this clause ensures that trains are traveling to new destinations 
-		TrackNode[] modifiers = {
-				pastDestinations.get(pastDestinations.size() - 1),
-				pastDestinations.get(pastDestinations.size() - 2),
-				pastDestinations.get(pastDestinations.size() - 3)
-		};
+		TrackNode[] modifiers = new TrackNode[howMany];
+			for(int i = 0; i < howMany; i++) {
+				modifiers[i] = pastDestinations.get(pastDestinations.size() - i - 1);
+				//gets the most recent destinations
+		}
 		ArrayList<TrackNode> localNodes = Model.getModel().getTrackNodes();
-		localNodes.remove(modifiers[1]);
-		localNodes.remove(modifiers[2]);
-		localNodes.remove(modifiers[3]);
+		for(int i = 0; i < modifiers.length; i++) {
+			localNodes.remove(modifiers[i]); 
+			//removes the most recent destinations from localNodes
+		}
 		//TODO this whole block from start to here can be written much better
 		
 		int r = (int) (Math.random() * localNodes.size());

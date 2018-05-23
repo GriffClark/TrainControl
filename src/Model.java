@@ -26,8 +26,8 @@ public class Model {
 	public void addTrackNode (TrackNode trackNode, double distanceModifier) {  
 		//FIXME these need to create perfect triangles instead of impossible geometry
 		/*
-		 * 
-		 * in order to create sound shapes, each node needs to make a perfect triangle with each possible pair of other nodes. This is only relevant for nodes 3+, and 1 and 2 can be n distance apart
+		 * in order to create sound shapes, each node needs to make a perfect triangle with each possible pair of other nodes. This is only relevant for nodes 3+,-->
+		 *  and 1 and 2 can be n distance apart
 		 * 
 		 * Create variable c that will be at random distance n determined by feeding a random number between b and c, where b is a point in the triangle a b c
 		 * using distance n, calculate distance between c and a
