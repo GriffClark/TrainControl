@@ -39,13 +39,39 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 			System.out.println("error cannot fill train while v > 0");
 		
 	}
-	
-	public void makeRequest() {
-		if(destination != null && v == 0 /*not already moving somewhere*/) {
-			Model.getModel().getTrainController().makeRequest(destination);
-		}		
+
+	public TrackNode getDestination() {
+		return destination;
+	}
+
+	public void setDestination(TrackNode destination) {
+		this.destination = destination;
+	}
+
+	public void addToConductor(Train self) {
+		Model.getModel(). getTrainController().addTrian(self);
+		//XXX this needs to be called after each train is initialized so that it can be manipulated by TrainController
 	}
 	
+	public void makeRequest(Train self) {
+		if(destination != null && v == 0 /*not already moving somewhere*/) {
+			Model.getModel().getTrainController().makeRequest(destination, self);
+		}
+		
+	}
+	
+	public TrackNode getCurrentLocation() {
+		return pastDestinations.get(pastDestinations.size() - 1);
+	}
+	
+	public ArrayList<TrackNode> getPastDestinations() {
+		return pastDestinations;
+	}
+
+	public void setPastDestinations(ArrayList<TrackNode> pastDestinations) {
+		this.pastDestinations = pastDestinations;
+	}
+
 	public void getRandomDestination() {
 		//this clause ensures that trains are traveling to new destinations 
 		TrackNode[] modifiers = {
@@ -83,7 +109,7 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 		 * train wants to get to destination as quickly as possible
 		 * when distanceToLocation == 0 v must == 0
 		 */
-		//FIXME write this
+		//TODO write this
 	}
 	
 	public double getAccel() {
