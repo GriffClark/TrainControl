@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//TODO each station should ony be able to connect to n number of other stations 
 public class Model {
 	
 	private ArrayList<TrackNode> trackNodes = new ArrayList<TrackNode>();
