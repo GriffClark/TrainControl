@@ -1,12 +1,8 @@
 public class Track {
-	private TrackDistancePair td;
 	private Train train;
+	private Station node1, node2;
 	private String name;
-	
-	public Track(TrackDistancePair td) {
-		this.td = td;
-		name = this.td.getStr();
-	}
+	private double length;
 	
 	public void addTrain (Train train) {
 		if(train == null) {
@@ -25,14 +21,6 @@ public class Track {
 		train = null;
 	}
 
-	public TrackDistancePair getTd() {
-		return td;
-	}
-
-	public void setTd(TrackDistancePair td) {
-		this.td = td;
-	}
-
 	public Train getTrain() {
 		return train;
 	}
@@ -47,6 +35,12 @@ public class Track {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public Track(Station node1, Station node2) {
+		this.node1 = node1;
+		this.node2 = node2;
+		this.name = node1.getName() + " -- " + node2.getName();
 	}
 	
 }

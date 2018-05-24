@@ -1,29 +1,18 @@
 import java.util.ArrayList;
-//TODO each station should ony be able to connect to n number of other stations 
+//TODO each station should only be able to connect to n number of other stations 
 public class Model {
 	
-	private ArrayList<TrackNode> trackNodes = new ArrayList<TrackNode>();
+	private ArrayList<Station> stations = new ArrayList<Station>();
 	private static Model singleModel = null;
 	private TrackController trackController;
 	private TrainController trainController;
-	private ArrayList<TrackDistancePair> tdPairs = new ArrayList<TrackDistancePair>(); 
-	
+
 	public Model() {
 		trackController = new TrackController();
 		trainController = new TrainController();
 	}
 	
-	public TrackDistancePair findTdPair(TrackNode node1, TrackNode node2) {
-		for(int i = 0; i < tdPairs.size(); i++) {
-			if(tdPairs.get(i).getStr().equals(node1 + "-" + node2) || tdPairs.get(i).getStr().equals(node2 + "-" + node1)) {
-				return tdPairs.get(i);
-			}
-		}
-		System.out.println("error in findTdPair");
-		return null;
-	}
-	
-	public void addTrackNode (TrackNode trackNode, double distanceModifier) {  
+	public void addTrackNode (Station trackNode, double distanceModifier) {  
 		//FIXME these need to create perfect triangles instead of impossible geometry
 		/*
 		 * in order to create sound shapes, each node needs to make a perfect triangle with each possible pair of other nodes. This is only relevant for nodes 3+,-->
@@ -36,50 +25,41 @@ public class Model {
 		 * 		if something does not check out, report an error to start? 
 		 * After node is verified to be possible, add all values of temp to tdPairs 
 		 */
-		if(trackNodes.size() > 0) {
-			trackNodes.add(trackNode);
-				for(int i = 0; i < trackNodes.size() - 1; i++) { //should loop through the whole thing except the one that was just added (distance to self = 0)
-					TrackDistancePair newTD = new TrackDistancePair(trackNodes.get(i), trackNode, (Math.random() * 100) * distanceModifier); 
-					tdPairs.add(newTD); //creates a new TrackDistancePair 
+		if(stations.size() > 0) {
+			stations.add(trackNode);
+				for(int i = 0; i < stations.size() - 1; i++) { //should loop through the whole thing except the one that was just added (distance to self = 0)
+					TrackDistancePair newTD = new TrackDistancePair(stations.get(i), trackNode, (Math.random() * 100) * distanceModifier); 
 					trackController.addTrack(new Track(newTD)); //makes the trackController aware of new connection 
 				}
 		}
 		
 		else
-			trackNodes.add(trackNode);
+			stations.add(trackNode);
 	}
 	
-	public void overrideNode(TrackNode node1, TrackNode node2, double newDistance) {
-		//finds the TrackDistancePair with both nodes and creates a new distance between them
-		String ref1 = node1.getName() + "-" + node2.getName();
-		String ref2 = node2.getName() + "-" + node2.getName();
-		for(int i = 0; i < tdPairs.size(); i++) {
-			if(tdPairs.get(i).getStr().equals(ref1) || tdPairs.get(i).getStr().equals(ref2)) {
-				tdPairs.get(i).setDistanceBetween(newDistance);
-				break;
-			}
-		}
-		
-	}
+//	public void overrideNode(Station node1, Station node2, double newDistance) {
+//		//finds the TrackDistancePair with both nodes and creates a new distance between them
+//		String ref1 = node1.getName() + "-" + node2.getName();
+//		String ref2 = node2.getName() + "-" + node2.getName();
+//		for(int i = 0; i < tdPairs.size(); i++) {
+//			if(tdPairs.get(i).getStr().equals(ref1) || tdPairs.get(i).getStr().equals(ref2)) {
+//				tdPairs.get(i).setDistanceBetween(newDistance);
+//				break;
+//			}
+//		}
+//		
+//	}
 
 	
-	public ArrayList<TrackNode> getTrackNodes() {
-		return trackNodes;
+	public ArrayList<Station> getTrackNodes() {
+		return stations;
 	}
 
-	public void setTrackNodes(ArrayList<TrackNode> trackNodes) {
-		this.trackNodes = trackNodes;
+	public void setTrackNodes(ArrayList<Station> trackNodes) {
+		this.stations = trackNodes;
 	}
 
-	public void addTdPair(TrackDistancePair t) {
-		tdPairs.add(t);
-		trackController.addTrack(t);
-	}
-	
 
-	public ArrayList<TrackDistancePair> getTdPairs(){
-		return tdPairs;
-	}
 	
 	public void addTrain(String name, double accel, double maxV, int maxPassengers) {
 		trainController.addTrian(new Train(name, accel, maxV, maxPassengers));

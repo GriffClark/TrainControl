@@ -9,9 +9,10 @@ public class Train {
 private double accel, maxV, v;
 private String name;
 private int numPassengers, maxPassengers;
-private TrackNode destination;
+private Station targetLocation;
 private double distanceToLocation;
-private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
+private ArrayList<Station> pastDestinations = new ArrayList<Station>();
+private Station lastDestination = pastDestinations.get(pastDestinations.size()-1);
 
 
 	public Train(String name, double accel, double maxV, int maxPassengers) {
@@ -40,12 +41,12 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 		
 	}
 
-	public TrackNode getDestination() {
-		return destination;
+	public Station getDestination() {
+		return targetLocation;
 	}
 
-	public void setDestination(TrackNode destination) {
-		this.destination = destination;
+	public void setDestination(Station destination) {
+		this.targetLocation = destination;
 	}
 
 	public void addToConductor(Train self) {
@@ -54,32 +55,32 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 	}
 	
 	public void makeRequest(Train self) {
-		if(destination != null && v == 0 /*not already moving somewhere*/) {
-			Model.getModel().getTrainController().makeRequest(destination, self);
+		if(targetLocation != null && v == 0 /*not already moving somewhere*/) {
+			Model.getModel().getTrainController().makeRequest(targetLocation, self);
 		}
 		
 	}
 	
-	public TrackNode getCurrentLocation() {
+	public Station getCurrentLocation() {
 		return pastDestinations.get(pastDestinations.size() - 1);
 	}
 	
-	public ArrayList<TrackNode> getPastDestinations() {
+	public ArrayList<Station> getPastDestinations() {
 		return pastDestinations;
 	}
 
-	public void setPastDestinations(ArrayList<TrackNode> pastDestinations) {
+	public void setPastDestinations(ArrayList<Station> pastDestinations) {
 		this.pastDestinations = pastDestinations;
 	}
 
-	public void getRandomDestination(int howMany) {
+	public void getRandomDestination(int howManyRecentsRemoved) {
 		//this clause ensures that trains are traveling to new destinations 
-		TrackNode[] modifiers = new TrackNode[howMany];
-			for(int i = 0; i < howMany; i++) {
+		Station[] modifiers = new Station[howManyRecentsRemoved];
+			for(int i = 0; i < howManyRecentsRemoved; i++) {
 				modifiers[i] = pastDestinations.get(pastDestinations.size() - i - 1);
 				//gets the most recent destinations
 		}
-		ArrayList<TrackNode> localNodes = Model.getModel().getTrackNodes();
+		ArrayList<Station> localNodes = Model.getModel().getTrackNodes();
 		for(int i = 0; i < modifiers.length; i++) {
 			localNodes.remove(modifiers[i]); 
 			//removes the most recent destinations from localNodes
@@ -87,8 +88,8 @@ private ArrayList<TrackNode> pastDestinations = new ArrayList<TrackNode>();
 		//TODO this whole block from start to here can be written much better
 		
 		int r = (int) (Math.random() * localNodes.size());
-		this.destination = localNodes.get(r);
-		distanceToLocation = Model.getModel().findTdPair(destination, pastDestinations.get(pastDestinations.size() - 1)).getDistanceBetween();
+		this.targetLocation = localNodes.get(r);
+		distanceToLocation = 
 	}
 
 	public double timeToDestination() { //going to be used when routing trains 

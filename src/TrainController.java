@@ -6,11 +6,11 @@ public class TrainController {
 	
 	protected class Request{
 		private Train train;
-		private TrackNode tn;
+		private Station s;
 		
-		public Request(Train train, TrackNode tn) {
+		public Request(Train train, Station tn) {
 			this.train = train;
-			this.tn = tn;
+			this.s = tn;
 		}
 
 		public Train getTrain() {
@@ -21,12 +21,12 @@ public class TrainController {
 			this.train = train;
 		}
 
-		public TrackNode getTn() {
-			return tn;
+		public Station getStation() {
+			return s;
 		}
 
-		public void setTn(TrackNode tn) {
-			this.tn = tn;
+		public void setTn(Station s) {
+			this.s = s;
 		}
 		
 	}
@@ -35,13 +35,15 @@ public class TrainController {
 		onControl.add(t);
 	}
 	
-	public void makeRequest(TrackNode tn, Train self) { //TODO this is not accounting for passenger load/unload time
+
+	
+	public void makeRequest(Station s, Train self) { //TODO this is not accounting for passenger load/unload time
 		/**
 		 * the end result of calling this method should be a route that TrainController can tell the train to follow by setting destinations for the train and controlling its speed
 		 */
 		for(int i = 0; i < onControl.size(); i++) {
 			//routing
-			TrackDistancePair tdPair = Model.getModel().findTdPair(self.getCurrentLocation(), tn);
+			TrackDistancePair tdPair = Model.getModel().findTdPair(self.getCurrentLocation(), s);
 			if(Model.getModel().getTrackController().isTrackOpen(tdPair) == true) {
 				//if the track is open
 				
