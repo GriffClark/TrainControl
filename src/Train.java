@@ -12,6 +12,7 @@ private int numPassengers, maxPassengers;
 private Station targetLocation;
 private double distanceToLocation;
 private ArrayList<Station> pastDestinations = new ArrayList<Station>();
+
 private Station lastDestination = pastDestinations.get(pastDestinations.size()-1);
 
 
@@ -29,6 +30,16 @@ private Station lastDestination = pastDestinations.get(pastDestinations.size()-1
 		//TODO make this so that you can put in the name of a type of train you want and it will make it
 		}
 	}
+	
+	
+	public Station getLastDestination() {
+		return lastDestination;
+	}
+
+	public void setLastDestination(Station lastDestination) {
+		this.lastDestination = lastDestination;
+	}
+
 	public void fillTrain() {
 		if(v==0) {
 			while(numPassengers < maxPassengers) {
@@ -89,7 +100,7 @@ private Station lastDestination = pastDestinations.get(pastDestinations.size()-1
 		
 		int r = (int) (Math.random() * localNodes.size());
 		this.targetLocation = localNodes.get(r);
-		distanceToLocation = 
+		distanceToLocation = Model.getModel().getTrackController().getDistanceTo(lastDestination, targetLocation)
 	}
 
 	public double timeToDestination() { //going to be used when routing trains 

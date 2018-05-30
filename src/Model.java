@@ -12,29 +12,60 @@ public class Model {
 		trainController = new TrainController();
 	}
 	
-	public void addTrackNode (Station trackNode, double distanceModifier) {  
-		//FIXME these need to create perfect triangles instead of impossible geometry
-		/*
-		 * in order to create sound shapes, each node needs to make a perfect triangle with each possible pair of other nodes. This is only relevant for nodes 3+,-->
-		 *  and 1 and 2 can be n distance apart
-		 * 
-		 * Create variable c that will be at random distance n determined by feeding a random number between b and c, where b is a point in the triangle a b c
-		 * using distance n, calculate distance between c and a
-		 * using the relation between c and a/b, triangles can be made with c , a , and R, where R is the remaining nodes in the network. Add pairs to a temp ArrayList<TrackDistancePair>
-		 * this math will then be verified by using c, b and, R. Add pairs to a temp ArrayList<TrackDistancePair>
-		 * 		if something does not check out, report an error to start? 
-		 * After node is verified to be possible, add all values of temp to tdPairs 
-		 */
-		if(stations.size() > 0) {
-			stations.add(trackNode);
-				for(int i = 0; i < stations.size() - 1; i++) { //should loop through the whole thing except the one that was just added (distance to self = 0)
-					TrackDistancePair newTD = new TrackDistancePair(stations.get(i), trackNode, (Math.random() * 100) * distanceModifier); 
-					trackController.addTrack(new Track(newTD)); //makes the trackController aware of new connection 
-				}
+	public void createStations (int numStations, int numConnections, double distanceModifier) {  
+		
+		//generate stations
+		for(int i = 0; i < numStations; i++) {
+			Station s = new Station();
+			s.setName("Station" + i);
+			stations.add(s);
 		}
 		
-		else
-			stations.add(trackNode);
+		//generate connections
+		for(int i = 0; i < stations.size(); i++) {
+			for(int j = 0; j < numConnections; j++) {
+				stations.get(i).addConnection(stations.get((int)(Math.random() * stations.size())));
+				//do I have to worry about stations having the same connection twice? I don't think so
+			}
+		}
+				
+		for(int i = 0 ; i < stations.size(); i++) {
+			//first station will have two connections for simplicity right now
+			/* find the other station that it connects to
+			 * create a track that is of length n connecting it to the connected station
+			 * 	if a track already exists, do not that make that connection --> is there a faster way to see if a station already exists than looping/
+			 * through the list of stations one at a time and seeing if they are the same?
+			 */
+			
+			for(int j = 0; j< stations.get(i).getConnections().size(); j++) {
+				if(trackController.getActiveTracks().size() < 2) {
+					Track t = new Track((stations.get(i)), stations.get(i).getConnections().get(j), Math.random() * distanceModifier);
+					trackController.addTrack(t);
+				} //end if loop for first two tracks
+				else {
+					//figure out how to add additional tracks based on angles and triangles and shit
+				}
+				
+			
+			}
+			
+		}
+		
+		
+		//find distance between stations
+		//going to hardcode two initial values because they don't matter that much
+		
+		for(int i = 0; i < stations.size(); i++) {
+			for(int j = 0; j < stations.get(i).getNumConnections(); j++) { //loops through each connection for each station
+				Track t = new Track(stations.get(i), stations.get(i).getConnections().get(j)); //TODO test this line to see if it is pulling a each station that t should be connecting
+				if(t.getLength() == 0) { //0 is defualt set so the track has not been defined yet
+					//TODO figure out how to define these lengths 
+					trackController.addTrack(t);
+				}
+				//if the if loop above isn't hit, that means that the track has already been initialized and no action needs to be taken
+			}
+		}
+		
 	}
 	
 //	public void overrideNode(Station node1, Station node2, double newDistance) {

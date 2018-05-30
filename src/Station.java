@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class Station {
-	private ArrayList<TrackDistancePair> connections = new ArrayList<TrackDistancePair>();
+	private ArrayList<Station> connections = new ArrayList<Station>();
 	private int maxConnections;
 	private String name;
 
@@ -9,25 +9,24 @@ public class Station {
 		maxConnections = 5;
 	}
 	
-	public void addConnection(Station self, Station other, double d) {
-		TrackDistancePair t = new TrackDistancePair(self, other, d);
-		connections.add(t);
+	public void addConnection(Station other) {
+		connections.add(other);
 	}
 	
 	public boolean isConnectedTo(Station otherStation) {
 		for(int i = 0; i < connections.size(); i++) {
-			if(connections.get(i).getNode2() == otherStation || connections.get(i).getNode1() == otherStation) {
+			if(connections.get(i).equals(otherStation) ) { //FIXME is this correct operator 
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public ArrayList<TrackDistancePair> getConnections() {
+	public ArrayList<Station> getConnections() {
 		return connections;
 	}
 
-	public void setConnections(ArrayList<TrackDistancePair> connections) {
+	public void setConnections(ArrayList<Station> connections) {
 		this.connections = connections;
 	}
 

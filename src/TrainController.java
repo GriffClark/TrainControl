@@ -43,27 +43,35 @@ public class TrainController {
 		 */
 		for(int i = 0; i < onControl.size(); i++) {
 			//routing
-			TrackDistancePair tdPair = Model.getModel().findTdPair(self.getCurrentLocation(), s);
-			if(Model.getModel().getTrackController().isTrackOpen(tdPair) == true) {
-				//if the track is open
-				
-				if(onControl.get(i).getDestination().equals(self.getDestination())) {
+			if(s.isConnectedTo(self.getLastDestination()) == true) {
+				//locate Track t
+				Track t = null;
+				if(Model.getModel().getTrackController().isTrackOpen(t) == true) {
+					//if the track is open
 					
-					if(onControl.get(i).timeToDestination() >= self.timeToDestination()) {
-						//the other train on it's current course can get there faster 	
+					if(onControl.get(i).getDestination().equals(self.getDestination())) {
+						
+						if(onControl.get(i).timeToDestination() >= self.timeToDestination()) {
+							//the other train on it's current course can get there faster 	
+						}
+						else {
+							//you can get there faster	
+						}
 					}
 					else {
-						//you can get there faster	
+						//go there
 					}
 				}
 				else {
-					//go there
+					//track is not open. Find alternate routes or if it is faster to queue for the current track 
 				}
 			}
 			else {
-				//track is not open. Find alternate routes or if it is faster to queue for the current track 
+				//track is not connected. same as above else statment I think need to find alternate route
 			}
-		} // end for loop
+		}
+			
+			
 			
 	}
 }
